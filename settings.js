@@ -12,7 +12,8 @@ http.createServer(function(request,response)
 	}
 	else if(request.url==='/query/')
 	{
-		
+		response.writeHead(200,{'Content-Type':'application/json'});
+		response.end('{}');
 	}
 	else
 		fileServer.serve(request,response);
