@@ -12,8 +12,28 @@ http.createServer(function(request,response)
 	}
 	else if(request.url==='/query/')
 	{
-		response.writeHead(200,{'Content-Type':'application/json'});
-		response.end('{}');
+		var body='';
+		request.on('data',function(data)
+		{
+			body+=data;
+		});
+		request.on('end',function()
+		{
+			body=decodeURIComponent(body);
+			var requestObject=null;
+			try
+			{
+				requestObject=JSON.parse(body);
+				var responseObject=serverLogic(requestObject);
+				response.writeHead(200,{'Content-Type':'application/json'});
+				response.end(JSON.stringify(responseObject));
+			}
+			catch(e)
+			{
+				response.writeHead(400,{'Content-Type':'application/json'});
+				response.end(JSON.stringify({status:'error',message:e.toString()}));
+			}
+		});
 	}
 	else
 		fileServer.serve(request,response);
@@ -21,3 +41,12 @@ http.createServer(function(request,response)
 console.log('Open http://127.0.0.1:'+port+'/ to change settings and see progress.');
 
 //console.log('>',s.getAccountsList(console.log.bind(console,'<')));
+function serverLogic(requestObject)
+{
+	var responseObject={};
+	if(!('action' in requestObject))
+		return responseObject;
+	if(requestObject.action==='getaccountslist')
+		responseObject={status:'ok'};
+	return responseObject;
+}

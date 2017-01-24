@@ -59,6 +59,8 @@ var AJAX={
 					}
 					parameters=tmparr.join('&');
 				}
+				else
+					parameters=encodeURIComponent(parameters);
 				xmlhttp.send(parameters);
 			}
 			else 
@@ -76,7 +78,7 @@ var Ajax={
 	send:function(parameters,callback)
 	{
 		if(typeof parameters==='string') parameters=JSON.parse(parameters);
-		var postParameters={query:JSON.stringify(parameters)};
+		var postParameters=JSON.stringify(parameters);
 		var ajaxobject=Ajax.ajaxobject;
 		if(ajaxobject)
 		{
