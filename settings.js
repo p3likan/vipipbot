@@ -1,9 +1,9 @@
-var settings=require('./js/settings.js');
+var Settings=require('./js/settings.js');
 var http=require('http');
 var static=require('node-static');
 var fileServer=new static.Server('./settingsserver');
 var port=5534;
-var s=new settings('./test.txt');
+var settings=new Settings('./test.txt');
 http.createServer(function(request,response)
 {
 	if(request.url==='/')
@@ -24,9 +24,11 @@ http.createServer(function(request,response)
 			try
 			{
 				requestObject=JSON.parse(body);
-				var responseObject=serverLogic(requestObject);
-				response.writeHead(200,{'Content-Type':'application/json'});
-				response.end(JSON.stringify(responseObject));
+				serverLogic(requestObject,function(responseObject)
+				{
+					response.writeHead(200,{'Content-Type':'application/json'});
+					response.end(JSON.stringify(responseObject));
+				});
 			}
 			catch(e)
 			{
@@ -41,12 +43,16 @@ http.createServer(function(request,response)
 console.log('Open http://127.0.0.1:'+port+'/ to change settings and see progress.');
 
 //console.log('>',s.getAccountsList(console.log.bind(console,'<')));
-function serverLogic(requestObject)
+function serverLogic(requestObject,callback)
 {
+	if(!callback)
+		callback=function(responseObject){return responseObject;};
 	var responseObject={};
 	if(!('action' in requestObject))
-		return responseObject;
+		return callback(responseObject);
 	if(requestObject.action==='getaccountslist')
-		responseObject={status:'ok'};
-	return responseObject;
+	{
+		responseObject=settings.getAccountsList();
+	}
+	return callback(responseObject);
 }
