@@ -4,7 +4,7 @@ var static=require('node-static');
 var fileServer=new static.Server('./settingsserver');
 var port=5534;
 var settings=new Settings('./test.txt');
-http.createServer(function(request,response)
+http.createServer((request,response)=>
 {
 	if(request.url==='/')
 	{
@@ -13,18 +13,18 @@ http.createServer(function(request,response)
 	else if(request.url==='/query/')
 	{
 		var body='';
-		request.on('data',function(data)
+		request.on('data',(data)=>
 		{
 			body+=data;
 		});
-		request.on('end',function()
+		request.on('end',()=>
 		{
 			body=decodeURIComponent(body);
 			var requestObject=null;
 			try
 			{
 				requestObject=JSON.parse(body);
-				serverLogic(requestObject,function(responseObject)
+				serverLogic(requestObject,(responseObject)=>
 				{
 					response.writeHead(200,{'Content-Type':'application/json'});
 					response.end(JSON.stringify(responseObject));
@@ -46,7 +46,7 @@ console.log('Open http://127.0.0.1:'+port+'/ to change settings and see progress
 function serverLogic(requestObject,callback)
 {
 	if(!callback)
-		callback=function(responseObject){return responseObject;};
+		callback=(responseObject)=>responseObject;
 	var responseObject={};
 	if(!('action' in requestObject))
 		return callback(responseObject);

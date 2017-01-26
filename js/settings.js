@@ -23,7 +23,7 @@ Settings=function(filename)
 	};
 	var readFileAsync=function(filename,callback,reload)
 	{
-		fs.stat(filename,function(error,stat)
+		fs.stat(filename,(error,stat)=>
 		{
 			if(error && error.code!=='ENOENT')
 				console.log(error);
@@ -33,7 +33,7 @@ Settings=function(filename)
 					filesCache[filename].stat.mtime.getTime()===stat.mtime.getTime())
 				callback(filesCache[filename].data);
 			else
-				fs.readFile(filename,function(error,content)
+				fs.readFile(filename,(error,content)=>
 				{
 					if(error && error.code!=='ENOENT')
 						console.log(error);
@@ -86,7 +86,7 @@ Settings=function(filename)
 	var writeFileAsync=function(filename,data,callback)
 	{
 		var content=toContent(data);
-		fs.writeFile(filename,content,function(error)
+		fs.writeFile(filename,content,(error)=>
 		{
 			if(error)
 				console.log(error);
@@ -111,10 +111,10 @@ Settings=function(filename)
 	};
 	var getData=function(filename,defaultvalue,callback)
 	{
-		return readFile(filename,callback&&function(data)
+		return readFile(filename,callback&&((data)=>
 		{
 			callback(data||defaultvalue);
-		})||((!callback)&&defaultvalue);
+		}))||((!callback)&&defaultvalue);
 	};
 	this.getAccountsList=function(callback)
 	{

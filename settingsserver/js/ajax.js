@@ -85,7 +85,7 @@ var Ajax={
 			ajaxobject.classList.add('ajax');
 			Ajax.ajaxobject=null;
 		}
-		var ajax=AJAX.send(location.href+'query/',postParameters,function(statusCode,responseText)
+		var ajax=AJAX.send(location.href+'query/',postParameters,(statusCode,responseText)=>
 		{
 			if(statusCode===200)
 			{
@@ -123,7 +123,7 @@ var Ajax={
 		var query={};
 		var elements=Array.prototype.slice.call(form.elements);
 		var lastSubmit=null;
-		elements.forEach(function(currentValue,index,array)
+		elements.forEach((currentValue,index,array)=>
 		{
 			if(currentValue.type==='submit' && currentValue.value!=='') lastSubmit=currentValue;
 			if(currentValue.name)
