@@ -16,15 +16,5 @@
 				<descr></descr>
 			</div>
 		</template>
-		<script>
-			var c=document.querySelector('#accountline').content;
-			var d=document.querySelector('#accountslist');
-			for(var i=0;i<10;++i)
-			{
-				var l=c.cloneNode(true);
-				l.querySelector('login').innerText=i;
-				d.appendChild(l);
-			}
-		</script>
 	</body>
 </html>

@@ -101,16 +101,13 @@ var Ajax={
 				if(responseObject!==null)
 				{
 					if(ajaxobject) ajaxobject.classList.remove('ajax');
-					if(responseObject.status==='ok')
+					try
 					{
-						try
-						{
-							if(callback) callback(responseObject);
-						}
-						catch(e)
-						{
-							console.log(e);
-						}
+						if(callback) callback(responseObject);
+					}
+					catch(e)
+					{
+						console.log(e);
 					}
 				} 
 			}
